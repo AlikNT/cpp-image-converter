@@ -36,7 +36,32 @@ static int GetBMPStride(int w) {
     return 4 * ((w * 3 + 3) / 4);
 }
 
-// напишите эту функцию
+BitmapFileHeader MakeHeader (const int stride, const int height) {
+    BitmapFileHeader file_header;
+    file_header.bf_type = 0x4D42; // 'BM'
+    file_header.bf_size = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader) + stride * height;
+    file_header.bf_reserved1 = 0;
+    file_header.bf_reserved2 = 0;
+    file_header.bf_off_bits = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader);
+    return file_header;
+}
+
+BitmapInfoHeader MakeHeaderInfo (const int stride, const int width, const int height) {
+    BitmapInfoHeader header_info;
+    header_info.bi_size = sizeof(BitmapInfoHeader);
+    header_info.bi_width = width;
+    header_info.bi_height = height;
+    header_info.bi_planes = 1;
+    header_info.bi_bit_count = 24;
+    header_info.bi_сompression = 0;
+    header_info.bi_size_image = stride * height;
+    header_info.bi_x_pxls_per_meter = 11811;
+    header_info.bi_y_pxls_per_meter = 11811;
+    header_info.bi_clr_used = 0;
+    header_info.bi_clr_important = 0x1000000;
+    return header_info;
+}
+
 bool SaveBMP(const Path& file, const Image& image) {
     ofstream ofs(file, ios::binary);
     if (!ofs) {
@@ -47,28 +72,12 @@ bool SaveBMP(const Path& file, const Image& image) {
     int height = image.GetHeight();
     int stride = GetBMPStride(width);
 
-    BitmapFileHeader file_header;
-    file_header.bf_type = 0x4D42; // 'BM'
-    file_header.bf_size = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader) + stride * height;
-    file_header.bf_reserved1 = 0;
-    file_header.bf_reserved2 = 0;
-    file_header.bf_off_bits = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader);
+    BitmapFileHeader header = MakeHeader(stride, height);
 
-    BitmapInfoHeader info_header;
-    info_header.bi_size = sizeof(BitmapInfoHeader);
-    info_header.bi_width = width;
-    info_header.bi_height = height;
-    info_header.bi_planes = 1;
-    info_header.bi_bit_count = 24;
-    info_header.bi_сompression = 0;
-    info_header.bi_size_image = stride * height;
-    info_header.bi_x_pxls_per_meter = 11811;
-    info_header.bi_y_pxls_per_meter = 11811;
-    info_header.bi_clr_used = 0;
-    info_header.bi_clr_important = 0x1000000;
+    BitmapInfoHeader header_info = MakeHeaderInfo(stride, width, height);
 
-    ofs.write(reinterpret_cast<char*>(&file_header), sizeof(file_header));
-    ofs.write(reinterpret_cast<char*>(&info_header), sizeof(info_header));
+    ofs.write(reinterpret_cast<char*>(&header), sizeof(header));
+    ofs.write(reinterpret_cast<char*>(&header_info), sizeof(header_info));
 
 
     std::vector<char> buff(stride);
