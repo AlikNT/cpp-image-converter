@@ -1,7 +1,7 @@
 ## Universal image converter
 
 #### Description
-The program converts images between different formats. It supports three formats BMP, PPM, JPEG.
+The program converts images between different formats. It supports formats BMP, PPM, JPEG.
 
 #### Build
 ```Bash
