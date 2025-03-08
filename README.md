@@ -1,5 +1,7 @@
 ## Universal image converter
 
+![C++](https://img.shields.io/badge/С++-00599C)
+
 #### Description
 The program converts images between different formats. It supports formats BMP, PPM, JPEG.
 
