@@ -2,6 +2,7 @@
 
 ![C++](https://img.shields.io/badge/С++-00599C)
 ![LibJPEG](https://img.shields.io/badge/LibJPEG-009B77)
+![CMake](https://img.shields.io/badge/CMake-D1242F)
 
 #### Description
 The program converts images between different formats. It supports formats BMP, PPM, JPEG.
